@@ -60,8 +60,8 @@ class KSVD(object):
 
 
 if __name__ == '__main__':
-    im_ascent = cv2.imread("Arthur.png", 0).astype(float)
-    ksvd = KSVD(100)
+    im_ascent = cv2.imread("AP_gray.png", 0).astype(float)
+    ksvd = KSVD(200)
     dictionary, sparsecode = ksvd.fit(im_ascent)
     plt.figure()
     plt.subplot(1, 2, 1)
