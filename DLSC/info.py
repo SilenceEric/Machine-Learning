@@ -1,4 +1,4 @@
-class info:
+class Info:
     def __init__(self):
         self.normtrigger = 0
         self.paralltrigger = 0

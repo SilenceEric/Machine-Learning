@@ -2,7 +2,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import cv2
-from info import info
+from Info import Info
 from Record import Record
 
 def GeneData(info, Record):
@@ -83,19 +83,26 @@ def GeneData(info, Record):
             Data1[:,i] = patch[:]/Data1norm[:,i]
 
     PSNRinpuut = 10 * np.log10(255**2 / np.mean(np.power((y1[:] - y0[:]), 2)))
-   
+    
     plt.figure()
-    plt.subplot(1, 2, 1)
+    plt.subplot(1, 3, 1)
     plt.imshow(y0, cmap='gray')
     plt.title('Original image')
-    plt.subplot(1, 2, 2)
+    plt.subplot(1, 3, 2)
     plt.imshow(y1, cmap='gray')
     plt.title('Add noise: PSNR=%f' %PSNRinpuut)
+    plt.subplot(1, 3, 3)
+    plt.imshow(Dictionary, cmap='gray')
+    plt.title('DCT')
+    plt.show()
     
     return Data1, Dictionary
+
+def recoverImg(Data):
+    return 0
     
 
 if __name__ == "__main__":
-    info = info()
+    info = Info()
     Record = Record()
     GeneData(info, Record)
