@@ -115,6 +115,10 @@ class Function:
         norm = np.sum(np.abs(Z)) / np.sqrt(np.sum(Z**2))
         HP = (sqrtn-norm) / (sqrtn-1)
         return HP
+    
+    def softh(x, t):
+        result = np.sign(x) * np.maximum(np.abs(x)-t, 0)
+        return result
         
 
     if __name__ == "__main__":
