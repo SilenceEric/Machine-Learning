@@ -1,5 +1,10 @@
+import numpy as np
 class Delta:
-    def _init_(self):
-        self.t = 0
-        self.B = 0
-        self.H = 0
+    
+    def __init__(self, info):
+        self.Z = np.empty((info.maxLayer+1, info.n, info.N))
+        self.C = np.empty((info.maxLayer+1, info.n, info.N))
+        self.t = np.empty((info.maxLayer+1, info.n, info.N))
+        self.B = np.empty((info.maxLayer+1, info.n, info.N))
+        self.H = np.empty((info.maxLayer+1, info.n, info.n))
+        
