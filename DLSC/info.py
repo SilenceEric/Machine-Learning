@@ -6,12 +6,14 @@ class Info:
         self.paralltrigger = 0
         self.parallcase = 'aver'
         
-        self.solver = 'L'
-        self.m = 8**2
-        self.n = 16**2
+        self.solver = 'T'
+        self.m = 64
+        self.n = 256
         self.N = (int)(512-np.sqrt(self.m)+1)**2
-        self.p = 2
+        self.p = 1
         self.lamda = 1e-5
         self.alpha = 15
-        self.sigma = 20
+        self.sigma = 30
         self.maxLayer = 5
+        self.eta=-1.2
+        self.scale=1.8*1e-2

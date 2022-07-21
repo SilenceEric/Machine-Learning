@@ -1,21 +1,20 @@
 # coding=utf-8
 import numpy as np
 import matplotlib.pyplot as plt
+import cv2
 
 from Info import Info
 from Record import Record
 
 class Function:
-    def addNoise(y0, sigma, Record):
+    def addNoise(y0, sigma):
         N = np.size(y0,0) #512
         noise = abs(np.random.randn(N, N)) #随机生成高斯噪声
         y1 = y0 + sigma * noise #添加噪声
-        Record.PSNRinpuut = 10 * np.log10(255**2 / np.mean(np.power((y1[:] - y0[:]), 2))) #计算PSNR峰值信噪比
-        return y1
-        
-    def GeneData(y0, y1, info):
-        m,n = 8,16
-        #初始化字典
+        PSNR = 10 * np.log10(255**2 / np.mean(np.power((y1[:] - y0[:]), 2))) #计算PSNR峰值信噪比
+        return y1, PSNR
+    
+    def geneDic(m, n):
         Dictionary = np.zeros((m,n))
         for k in range(0, n):
             V = np.cos(np.arange(0,m)*np.pi*k/n)
@@ -25,6 +24,10 @@ class Function:
 
         Dictionary = np.kron(Dictionary, Dictionary)
         Dictionary = np.dot(Dictionary, np.diag(1/np.sqrt(np.sum(Dictionary * Dictionary, 0))))
+        return Dictionary
+    
+    def geneData(y0, y1, info):
+        m = 8
         # NoTotal = np.size(y0, 0)-m+1
         # cnt, Kdata = 0,1
         # sidenum = int(np.ceil((NoTotal-1)/Kdata)+1)
@@ -104,7 +107,7 @@ class Function:
 
         Record.PSNRinpuut = 10 * np.log10(255**2 / np.mean(np.power((y1[:] - y0[:]), 2)))
         
-        return Data, Data1, Dictionary
+        return Data, Data1
 
     def recoverImg(Data, imgSize, k):
         img = np.zeros((imgSize,imgSize))
@@ -132,6 +135,7 @@ class Function:
         px[px>0] = 1
         px[px<=0] = 0
         rt = (x-t*x/np.abs(x))*px
+        rt[rt == np.inf] = 0
         pt = np.abs(rt)
         return rt, px, pt
     
@@ -144,10 +148,12 @@ class Function:
 
     if __name__ == "__main__":
         info = Info()
-        Record = Record()
-        Data,X = GeneData(info, Record)
-        Img = recoverImg(Data,512,8)
+        record = Record(info)
+        X0 = cv2.imread("AP_gray.png", 0).astype(float) #读取图片 512×512
+        X1 = addNoise(X0, info.sigma, record)
+        Xorig, X, D = geneData(X0, X1, info)
+        #Img = recoverImg(Data,512,8)
         
-        plt.imshow(Img, cmap="gray")
-        plt.title("Recover Image: Arthur")
+        plt.imshow(D, cmap="gray")
+        plt.title("DCT Dictionary")
         plt.show()
